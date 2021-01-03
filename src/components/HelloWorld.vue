@@ -6,7 +6,7 @@
       {{ randomCatFact }}
     </p>
     <h3>Credits</h3>
-    <div>Check out <a href="https://github.com/pawelgiczewski/cypress-starter" target="_blank">the repository on GitHub</a>.</div>
+    <div>Check out <a href="https://github.com/pawelgiczewski/demo-webapp" target="_blank">the repository on GitHub</a>.</div>
     <div>Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
     <div>Demo app uses 3rd party API - <a href="https://alexwohlbruck.github.io/cat-facts/" target="_blank">https://alexwohlbruck.github.io/cat-facts/</a>.</div>
   </div>
