@@ -1,10 +1,9 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <button v-on:click="setRandomCatFact">Ask server for random cat fact</button>
-    <p>
-      {{ randomCatFact }}
-    </p>
+    <Button icon="pi pi-globe" class="p-button-rounded p-button-secondary p-button-outlined" label="Ask server for random cat fact" v-on:click="setRandomCatFact"/>
+    <Message severity="success" v-show="isMessageDisplayed">{{ randomCatFact }}</Message>
+
     <h3>Credits</h3>
     <div>Check out <a href="https://github.com/pawelgiczewski/demo-webapp" target="_blank">the repository on GitHub</a>.</div>
     <div>Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
@@ -22,6 +21,7 @@ export default {
   },
   data() {
     return {
+      isMessageDisplayed: false,
       randomCatFact: ''
     }
   },
@@ -29,6 +29,7 @@ export default {
     async setRandomCatFact() {
       const fullCatFact = await this.getRandomCatFactFromService();
       this.randomCatFact = this.truncateCatFact(fullCatFact);
+      this.displayMessage();
     },
 
     async getRandomCatFactFromService() {
@@ -43,6 +44,14 @@ export default {
       } else {
         return text;
       }
+    },
+
+    displayMessage() {
+      this.isMessageDisplayed = true;
+    },
+
+    hideMessage() {
+      this.isMessageDisplayed = false;
     }
   }
 }
