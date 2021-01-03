@@ -21,4 +21,4 @@ deploy:
   local_dir: dist
   acl: public_read
   on:
-    branch: add-ci
+    branch: main
