@@ -1,4 +1,4 @@
-# demo-webapp
+# demo-webapp [![Build Status](https://travis-ci.org/pawelgiczewski/demo-webapp.svg?branch=main)](https://travis-ci.org/pawelgiczewski/demo-webapp)
 
 ## Project setup
 ```
