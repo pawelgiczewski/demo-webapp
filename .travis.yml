@@ -13,10 +13,10 @@ script:
 
 deploy:
   provider: s3
-  access_key_id: "AKIAIUNN4FW6UGWM2CBQ"
+  access_key_id: $AWS_KEY_ID
   secret_access_key: $AWS_SECRET_KEY
   bucket: "suburbs-demo-app"
-  skip_cleanup: true
+  cleanup: false
   region: "eu-central-1"
   local_dir: dist
   acl: public_read
