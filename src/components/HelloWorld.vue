@@ -1,14 +1,22 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <Button icon="pi pi-globe" class="p-button-rounded p-button-secondary p-button-outlined" label="Ask server for random cat fact" v-on:click="setRandomCatFact"/>
-    <Message v-for="fact of catFacts" :key="fact" severity="success">{{ fact }}</Message>
-
-    <h3>Credits</h3>
-    <div>Check out <a href="https://github.com/pawelgiczewski/demo-webapp" target="_blank">the repository on GitHub</a>.</div>
-    <div>Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-    <div>Demo app uses 3rd party API - <a href="https://alexwohlbruck.github.io/cat-facts/" target="_blank">https://alexwohlbruck.github.io/cat-facts/</a>.</div>
-  </div>
+<Card style="width: 70rem; margin: auto">
+    <template #title>
+        <img alt="Vue logo" src="./../assets/logo.png">
+        <p>{{ msg }}</p>
+    </template>
+    <template #content>
+      <Button icon="pi pi-globe" class="p-button-rounded p-button-secondary p-button-outlined" label="Ask server for random cat fact" v-on:click="setRandomCatFact"/>
+      <p><ProgressSpinner v-show="loading" style="width:50px;height:50px" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"/></p>
+      <Message v-for="fact of catFacts" :key="fact" severity="success">{{ fact }}</Message>
+    </template>
+    <template #footer>
+      <Divider></Divider>
+      <h3>Credits</h3>
+      <div>Check out <a href="https://github.com/pawelgiczewski/demo-webapp" target="_blank">the repository on GitHub</a>.</div>
+      <div>Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+      <div>Demo app uses 3rd party API - <a href="https://alexwohlbruck.github.io/cat-facts/" target="_blank">https://alexwohlbruck.github.io/cat-facts/</a>.</div>
+    </template>
+</Card>
 </template>
 
 <script>
@@ -21,19 +29,20 @@ export default {
   },
   data() {
     return {
+      loading: false,
       catFacts: []
     }
   },
   methods: {
-    async setRandomCatFact() {
-      const fullCatFact = await this.getRandomCatFactFromService();
-      const truncated = this.truncateCatFact(fullCatFact);
-      this.catFacts.push(truncated)
-    },
 
-    async getRandomCatFactFromService() {
+    setRandomCatFact() {
       const apiService = new ApiService();
-      return (await apiService.getRandomCatFact()).data.text;
+      this.loading = true
+      apiService.getRandomCatFact().then( res => {
+        this.loading = false;
+        const truncated = this.truncateCatFact(res.data.text);
+        this.catFacts.push(truncated)
+      })
     },
 
     truncateCatFact(text) {
