@@ -41,7 +41,7 @@ export default {
       apiService.getRandomCatFact().then( res => {
         this.loading = false;
         const truncated = this.truncateCatFact(res.data.text);
-        this.catFacts.push(truncated)
+        this.catFacts.unshift(truncated)
       })
     },
 
