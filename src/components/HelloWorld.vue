@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <Button icon="pi pi-globe" class="p-button-rounded p-button-secondary p-button-outlined" label="Ask server for random cat fact" v-on:click="setRandomCatFact"/>
-    <Message severity="success" v-show="isMessageDisplayed">{{ randomCatFact }}</Message>
+    <Message v-for="fact of catFacts" :key="fact" severity="success">{{ fact }}</Message>
 
     <h3>Credits</h3>
     <div>Check out <a href="https://github.com/pawelgiczewski/demo-webapp" target="_blank">the repository on GitHub</a>.</div>
@@ -21,15 +21,14 @@ export default {
   },
   data() {
     return {
-      isMessageDisplayed: false,
-      randomCatFact: ''
+      catFacts: []
     }
   },
   methods: {
     async setRandomCatFact() {
       const fullCatFact = await this.getRandomCatFactFromService();
-      this.randomCatFact = this.truncateCatFact(fullCatFact);
-      this.displayMessage();
+      const truncated = this.truncateCatFact(fullCatFact);
+      this.catFacts.push(truncated)
     },
 
     async getRandomCatFactFromService() {
@@ -45,14 +44,6 @@ export default {
         return text;
       }
     },
-
-    displayMessage() {
-      this.isMessageDisplayed = true;
-    },
-
-    hideMessage() {
-      this.isMessageDisplayed = false;
-    }
   }
 }
 </script>
