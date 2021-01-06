@@ -1,5 +1,5 @@
 <template>
-<Card style="width: 70rem; margin: auto">
+<Card style="width: 70rem; margin:0 auto">
     <template #title>
         <img alt="Vue logo" src="./../assets/logo.png">
         <p>{{ msg }}</p>
@@ -17,6 +17,14 @@
       <div>Demo app uses 3rd party API - <a href="https://alexwohlbruck.github.io/cat-facts/" target="_blank">https://alexwohlbruck.github.io/cat-facts/</a>.</div>
     </template>
 </Card>
+
+<!-- overlay -->
+<Dialog header="Error" v-model:visible="displayErrorPopup" :style="{width: '30vw'}">
+    <p>Ooops sth went wrong! It looks like service is unavailable. Please try again later or contact system administrator.</p>
+    <template #footer>
+        <Button label="Ok" icon="pi pi-check" @click="closeErrorPopup" autofocus />
+    </template>
+</Dialog>
 </template>
 
 <script>
@@ -30,7 +38,8 @@ export default {
   data() {
     return {
       loading: false,
-      catFacts: []
+      catFacts: [],
+      displayErrorPopup: false
     }
   },
   methods: {
@@ -39,10 +48,15 @@ export default {
       const apiService = new ApiService();
       this.loading = true
       apiService.getRandomCatFact().then( res => {
-        this.loading = false;
         const truncated = this.truncateCatFact(res.data.text);
         this.catFacts.unshift(truncated)
-      })
+        this.loading = false;
+      }).catch ( err => {
+        console.log(err);
+        this.loading = false;
+        this.openErrorPopup();
+      }
+      )
     },
 
     truncateCatFact(text) {
@@ -53,6 +67,14 @@ export default {
         return text;
       }
     },
+
+    openErrorPopup() {
+      this.displayErrorPopup = true;
+    },
+
+    closeErrorPopup() {
+      this.displayErrorPopup = false;
+    }
   }
 }
 </script>
