@@ -1,13 +1,13 @@
 <template>
-<Card style="width: 70rem; margin: auto">
+<Card style="width: 70rem; margin:0 auto">
     <template #title>
         <img alt="Vue logo" src="./../assets/logo.png">
         <p>{{ msg }}</p>
     </template>
     <template #content>
-      <Button icon="pi pi-globe" class="p-button-rounded p-button-secondary p-button-outlined" label="Ask server for random cat fact" v-on:click="setRandomCatFact"/>
-      <p><ProgressSpinner v-show="loading" style="width:50px;height:50px" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"/></p>
-      <Message v-for="fact of catFacts" :key="fact" severity="success">{{ fact }}</Message>
+      <Button automation-id="get-fact-button" icon="pi pi-globe" class="p-button-rounded p-button-secondary p-button-outlined" label="Ask server for random cat fact" v-on:click="setRandomCatFact"/>
+      <p><ProgressSpinner automation-id="loading-spinner" v-show="loading" style="width:50px;height:50px" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"/></p>
+      <Message automation-id="fact" v-for="fact of catFacts" :key="fact" severity="success">{{ fact }}</Message>
     </template>
     <template #footer>
       <Divider></Divider>
@@ -17,6 +17,14 @@
       <div>Demo app uses 3rd party API - <a href="https://alexwohlbruck.github.io/cat-facts/" target="_blank">https://alexwohlbruck.github.io/cat-facts/</a>.</div>
     </template>
 </Card>
+
+<!-- overlay -->
+<Dialog automation-id="error-popup" header="Error" v-model:visible="displayErrorPopup" :style="{width: '30vw'}">
+    <p>Ooops sth went wrong! It looks like service is unavailable. Please try again later or contact system administrator.</p>
+    <template #footer>
+        <Button automation-id="ok-button" label="Ok" icon="pi pi-check" @click="closeErrorPopup" autofocus />
+    </template>
+</Dialog>
 </template>
 
 <script>
@@ -30,7 +38,8 @@ export default {
   data() {
     return {
       loading: false,
-      catFacts: []
+      catFacts: [],
+      displayErrorPopup: false
     }
   },
   methods: {
@@ -39,10 +48,15 @@ export default {
       const apiService = new ApiService();
       this.loading = true
       apiService.getRandomCatFact().then( res => {
-        this.loading = false;
         const truncated = this.truncateCatFact(res.data.text);
-        this.catFacts.push(truncated)
-      })
+        this.catFacts.unshift(truncated)
+        this.loading = false;
+      }).catch ( err => {
+        console.log(err);
+        this.loading = false;
+        this.openErrorPopup();
+      }
+      )
     },
 
     truncateCatFact(text) {
@@ -53,6 +67,14 @@ export default {
         return text;
       }
     },
+
+    openErrorPopup() {
+      this.displayErrorPopup = true;
+    },
+
+    closeErrorPopup() {
+      this.displayErrorPopup = false;
+    }
   }
 }
 </script>
