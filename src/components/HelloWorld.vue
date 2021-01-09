@@ -5,9 +5,9 @@
         <p>{{ msg }}</p>
     </template>
     <template #content>
-      <Button icon="pi pi-globe" class="p-button-rounded p-button-secondary p-button-outlined" label="Ask server for random cat fact" v-on:click="setRandomCatFact"/>
-      <p><ProgressSpinner v-show="loading" style="width:50px;height:50px" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"/></p>
-      <Message v-for="fact of catFacts" :key="fact" severity="success">{{ fact }}</Message>
+      <Button automation-id="get-fact-button" icon="pi pi-globe" class="p-button-rounded p-button-secondary p-button-outlined" label="Ask server for random cat fact" v-on:click="setRandomCatFact"/>
+      <p><ProgressSpinner automation-id="loading-spinner" v-show="loading" style="width:50px;height:50px" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"/></p>
+      <Message automation-id="fact" v-for="fact of catFacts" :key="fact" severity="success">{{ fact }}</Message>
     </template>
     <template #footer>
       <Divider></Divider>
@@ -19,10 +19,10 @@
 </Card>
 
 <!-- overlay -->
-<Dialog header="Error" v-model:visible="displayErrorPopup" :style="{width: '30vw'}">
+<Dialog automation-id="error-popup" header="Error" v-model:visible="displayErrorPopup" :style="{width: '30vw'}">
     <p>Ooops sth went wrong! It looks like service is unavailable. Please try again later or contact system administrator.</p>
     <template #footer>
-        <Button label="Ok" icon="pi pi-check" @click="closeErrorPopup" autofocus />
+        <Button automation-id="ok-button" label="Ok" icon="pi pi-check" @click="closeErrorPopup" autofocus />
     </template>
 </Dialog>
 </template>
